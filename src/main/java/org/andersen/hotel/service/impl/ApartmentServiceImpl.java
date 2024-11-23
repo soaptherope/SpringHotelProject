@@ -6,6 +6,7 @@ import org.andersen.hotel.model.ApartmentStatusEnum;
 import org.andersen.hotel.repository.ApartmentRepository;
 import org.andersen.hotel.service.ApartmentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ApartmentServiceImpl extends CrudServiceImpl<Apartment> implements ApartmentService {
@@ -15,6 +16,7 @@ public class ApartmentServiceImpl extends CrudServiceImpl<Apartment> implements 
     }
 
     @Override
+    @Transactional
     public void reserveApartment(Long id, String nameOfClient) {
         repository.findById(id)
                 .map(apartment -> {
@@ -30,6 +32,7 @@ public class ApartmentServiceImpl extends CrudServiceImpl<Apartment> implements 
     }
 
     @Override
+    @Transactional
     public void releaseApartment(Long id, String nameOfClient) {
         repository.findById(id)
                 .map(apartment -> {
