@@ -2,6 +2,7 @@ package org.andersen.hotel.service.impl;
 
 import org.andersen.hotel.exception.ApartmentWithIdNotFoundException;
 import org.andersen.hotel.exception.IncorrectStatusOfApartmentException;
+import org.andersen.hotel.exception.WrongNameForReleasingApartmentException;
 import org.andersen.hotel.model.Apartment;
 import org.andersen.hotel.model.ApartmentStatusEnum;
 import org.andersen.hotel.repository.ApartmentRepository;
@@ -47,11 +48,12 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public boolean reserveApartment(Long id) {
+    public boolean reserveApartment(Long id, String nameOfClient) {
         return apartmentRepository.findById(id)
                 .map(apartment -> {
                     if (apartment.getApartmentStatus() == ApartmentStatusEnum.FREE) {
                         apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
+                        apartment.setNameOfClient(nameOfClient);
                         apartmentRepository.save(apartment);
                         return true;
                     }
@@ -61,13 +63,18 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public boolean releaseApartment(Long id) {
+    public boolean releaseApartment(Long id, String nameOfClient) {
         return apartmentRepository.findById(id)
                 .map(apartment -> {
                     if (apartment.getApartmentStatus() == ApartmentStatusEnum.RESERVED) {
-                        apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
-                        apartmentRepository.save(apartment);
-                        return true;
+                        if (apartment.getNameOfClient().equals(nameOfClient)) {
+                            apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
+                            apartment.setNameOfClient(null);
+                            apartmentRepository.save(apartment);
+                            return true;
+                        } else {
+                            throw new WrongNameForReleasingApartmentException();
+                        }
                     }
                     throw new IncorrectStatusOfApartmentException();
                 })

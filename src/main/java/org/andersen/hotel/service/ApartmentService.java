@@ -18,9 +18,9 @@ public interface ApartmentService {
 
     boolean apartmentExists(Long id);
 
-    boolean reserveApartment(Long id);
+    boolean reserveApartment(Long id, String nameOfClient);
 
-    boolean releaseApartment(Long id);
+    boolean releaseApartment(Long id, String nameOfClient);
 
     Apartment updateApartmentPrice(Long id, double newPrice);
 
