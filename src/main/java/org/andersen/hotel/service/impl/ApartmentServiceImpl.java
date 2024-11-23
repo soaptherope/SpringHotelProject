@@ -39,7 +39,10 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public void deleteApartment(Long id) {
-        apartmentRepository.deleteById(id);
+        apartmentRepository.findById(id)
+                .ifPresentOrElse(hotel -> apartmentRepository.deleteById(id), () -> {
+                    throw new ApartmentWithIdNotFoundException();
+                });
     }
 
     @Override
