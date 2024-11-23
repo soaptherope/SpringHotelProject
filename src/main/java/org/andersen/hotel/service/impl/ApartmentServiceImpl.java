@@ -46,13 +46,8 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public boolean apartmentExists(Long id) {
-        return apartmentRepository.existsById(id);
-    }
-
-    @Override
-    public boolean reserveApartment(Long id, String nameOfClient) {
-        return apartmentRepository.findById(id)
+    public void reserveApartment(Long id, String nameOfClient) {
+        apartmentRepository.findById(id)
                 .map(apartment -> {
                     if (apartment.getApartmentStatus() == ApartmentStatusEnum.FREE) {
                         apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
@@ -66,8 +61,8 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public boolean releaseApartment(Long id, String nameOfClient) {
-        return apartmentRepository.findById(id)
+    public void releaseApartment(Long id, String nameOfClient) {
+        apartmentRepository.findById(id)
                 .map(apartment -> {
                     if (apartment.getApartmentStatus() == ApartmentStatusEnum.RESERVED) {
                         if (apartment.getNameOfClient().equals(nameOfClient)) {

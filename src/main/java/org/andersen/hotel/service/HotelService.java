@@ -16,8 +16,6 @@ public interface HotelService {
 
     void deleteHotel(Long id);
 
-    boolean hotelExists(Long id);
-
     Hotel updateHotelName(Long id, String newName);
 
     List<Hotel> getAllHotelsSorted(Sort sort);

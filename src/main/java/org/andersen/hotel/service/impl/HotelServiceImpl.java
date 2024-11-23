@@ -42,12 +42,6 @@ public class HotelServiceImpl implements HotelService {
                 });
     }
 
-
-    @Override
-    public boolean hotelExists(Long id) {
-        return hotelRepository.existsById(id);
-    }
-
     @Override
     public Hotel updateHotelName(Long id, String newName) {
         return hotelRepository.findById(id)
