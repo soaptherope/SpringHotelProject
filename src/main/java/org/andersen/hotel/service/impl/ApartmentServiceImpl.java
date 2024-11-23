@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class ApartmentServiceImpl extends CrudServiceImpl<Apartment> implements ApartmentService {
 
     public ApartmentServiceImpl(ApartmentRepository apartmentRepository) {
@@ -16,7 +17,6 @@ public class ApartmentServiceImpl extends CrudServiceImpl<Apartment> implements 
     }
 
     @Override
-    @Transactional
     public void reserveApartment(Long id, String nameOfClient) {
         repository.findById(id)
                 .map(apartment -> {
@@ -32,7 +32,6 @@ public class ApartmentServiceImpl extends CrudServiceImpl<Apartment> implements 
     }
 
     @Override
-    @Transactional
     public void releaseApartment(Long id, String nameOfClient) {
         repository.findById(id)
                 .map(apartment -> {

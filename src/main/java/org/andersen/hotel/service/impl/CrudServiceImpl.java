@@ -4,10 +4,12 @@ import jakarta.persistence.EntityNotFoundException;
 import org.andersen.hotel.service.CrudService;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 public class CrudServiceImpl<T> implements CrudService<T> {
 
     protected final JpaRepository<T, Long> repository;
