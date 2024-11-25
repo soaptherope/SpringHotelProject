@@ -4,12 +4,13 @@ import jakarta.persistence.EntityNotFoundException;
 import org.andersen.hotel.model.Hotel;
 import org.andersen.hotel.repository.HotelRepository;
 import org.andersen.hotel.service.HotelService;
+import org.andersen.starter.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class HotelServiceImpl extends CrudServiceImpl<Hotel> implements HotelService {
+public class HotelServiceImpl extends BaseServiceImpl<Hotel> implements HotelService {
 
     public HotelServiceImpl(HotelRepository hotelRepository) {
         super(hotelRepository);
@@ -17,10 +18,10 @@ public class HotelServiceImpl extends CrudServiceImpl<Hotel> implements HotelSer
 
     @Override
     public Hotel updateHotelName(Long id, String newName) {
-        return repository.findById(id)
+        return baseRepository.findById(id)
                 .map(hotel -> {
                     hotel.setName(newName);
-                    return repository.save(hotel);
+                    return baseRepository.save(hotel);
                 })
                 .orElseThrow(EntityNotFoundException::new);
     }
