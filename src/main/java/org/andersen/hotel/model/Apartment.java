@@ -4,17 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.andersen.starter.BaseEntity;
 
 @Entity
 @Table(name = "apartments")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Apartment {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Apartment extends BaseEntity {
 
     @Column(name = "price", nullable = false)
     private double price;
