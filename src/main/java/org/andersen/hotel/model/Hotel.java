@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.andersen.starter.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Hotel extends BaseEntity {
+public class Hotel {
+
+    @Id
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
+    private Long id;
 
     @Column(nullable = false, length = 50)
     private String name;

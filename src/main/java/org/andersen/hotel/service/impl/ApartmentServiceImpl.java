@@ -3,62 +3,60 @@ package org.andersen.hotel.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import org.andersen.hotel.model.Apartment;
 import org.andersen.hotel.model.ApartmentStatusEnum;
+import org.andersen.hotel.repository.ApartmentRepository;
 import org.andersen.hotel.service.ApartmentService;
-import org.andersen.starter.BaseRepository;
-import org.andersen.starter.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class ApartmentServiceImpl extends BaseServiceImpl<Apartment> implements ApartmentService {
+public class ApartmentServiceImpl extends CrudServiceImpl<Apartment> implements ApartmentService {
 
-
-    public ApartmentServiceImpl(BaseRepository<Apartment> repository) {
-        super(repository);
+    public ApartmentServiceImpl(ApartmentRepository apartmentRepository) {
+        super(apartmentRepository);
     }
 
     @Override
     public void reserveApartment(Long id, String nameOfClient) {
-        baseRepository.findById(id)
+        repository.findById(id)
                 .map(apartment -> {
                     if (apartment.getApartmentStatus() == ApartmentStatusEnum.FREE) {
                         apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
                         apartment.setNameOfClient(nameOfClient);
-                        baseRepository.save(apartment);
+                        repository.save(apartment);
                         return true;
                     }
-                    throw new IllegalStateException();
+                    throw new IllegalStateException("Apartment is already reserved.");
                 })
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Apartment not found with ID: " + id));
     }
 
     @Override
     public void releaseApartment(Long id, String nameOfClient) {
-        baseRepository.findById(id)
+        repository.findById(id)
                 .map(apartment -> {
                     if (apartment.getApartmentStatus() == ApartmentStatusEnum.RESERVED) {
                         if (apartment.getNameOfClient().equals(nameOfClient)) {
                             apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
                             apartment.setNameOfClient(null);
-                            baseRepository.save(apartment);
+                            repository.save(apartment);
                             return true;
                         } else {
-                            throw new IllegalArgumentException();
+                            throw new IllegalArgumentException("Client name does not match.");
                         }
                     }
-                    throw new IllegalStateException();
+                    throw new IllegalStateException("Apartment is not reserved.");
                 })
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Apartment not found with ID: " + id));
     }
 
     @Override
     public Apartment updateApartmentPrice(Long id, double newPrice) {
-        return baseRepository.findById(id)
+        return repository.findById(id)
                 .map(apartment -> {
                     apartment.setPrice(newPrice);
-                    return baseRepository.save(apartment);
+                    return repository.save(apartment);
                 })
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Apartment not found with ID: " + id));
     }
 }

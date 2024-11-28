@@ -1,9 +1,8 @@
 package org.andersen.hotel.service;
 
 import org.andersen.hotel.model.Apartment;
-import org.andersen.starter.BaseService;
 
-public interface ApartmentService extends BaseService<Apartment> {
+public interface ApartmentService extends CrudService<Apartment> {
 
     void reserveApartment(Long id, String nameOfClient);
 

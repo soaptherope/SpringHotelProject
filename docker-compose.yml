@@ -1,0 +1,20 @@
+services:
+  hotel-app:
+    image: hotel-app
+    build: .
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15
+    container_name: hotel-db
+    environment:
+      POSTGRES_DB: hotel_database
+      POSTGRES_USER: hotel_admin
+      POSTGRES_PASSWORD: hotel_password
+    ports:
+      - "5433:5432"
+    restart: always
