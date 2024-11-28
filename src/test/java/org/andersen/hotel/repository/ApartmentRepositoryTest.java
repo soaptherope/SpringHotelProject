@@ -68,7 +68,6 @@ public class ApartmentRepositoryTest {
     @Test
     void deleteApartment() {
         Apartment apartment = new Apartment(100);
-        apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
 
         Apartment savedApartment = apartmentRepository.save(apartment);
         apartmentRepository.delete(savedApartment);
